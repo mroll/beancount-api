@@ -1,0 +1,23 @@
+[
+  {
+    "model": "books.currency",
+    "pk": 1,
+    "fields": {
+      "name": "usd"
+    }
+  },
+  {
+    "model": "books.currency",
+    "pk": 2,
+    "fields": {
+      "name": "cad"
+    }
+  },
+  {
+    "model": "books.currency",
+    "pk": 3,
+    "fields": {
+      "name": "eur"
+    }
+  }
+]
