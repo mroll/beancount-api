@@ -27,7 +27,9 @@ class Book(models.Model):
         if end_date is None:
             end_date = dt.now().strftime("%Y-%m-%d")
 
-        txn_query = Transaction.objects.filter(date__gte=start_date, date__lt=end_date)
+        txn_query = Transaction.objects.filter(
+            book__pk=self.pk, date__gte=start_date, date__lt=end_date
+        )
 
         if include_tags:
             txn_query = txn_query.filter(tags__name__in=include_tags)
@@ -52,7 +54,7 @@ class Book(models.Model):
         if net is False:
             posting_query = posting_query.exclude(units__startswith="-")
 
-        total = posting_query.aggregate(res=models.Sum("units_number"))["res"]
+        total = posting_query.aggregate(res=models.Sum("units_number"))["res"] or 0
 
         delta = relativedelta(
             dt.strptime(end_date, "%Y-%m-%d"), dt.strptime(start_date, "%Y-%m-%d")

@@ -29,7 +29,6 @@ router.register(r"postings", views.PostingViewSet)
 router.register(r"transactions", views.TransactionViewSet)
 router.register(r"opens", views.OpenViewSet)
 router.register(r"plaintext", views.PlaintextBookViewSet, basename="plaintext")
-# router.register(r"balances", views.BalanceSheet, basename="balances")
 
 urlpatterns = [
     path("balances/", views.BalanceSheet.as_view(), name="balancesheet"),

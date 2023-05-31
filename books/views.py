@@ -1,5 +1,6 @@
 from beancount.loader import load_string
 
+from rest_framework.decorators import action
 from rest_framework.serializers import Serializer, FileField
 from rest_framework.settings import api_settings
 from rest_framework import mixins
@@ -115,6 +116,23 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all().order_by("-name")
     serializer_class = BookSerializer
     # permission_classes = [permissions.IsAuthenticated]
+
+    @action(detail=True, methods=["get"], url_path="statistics/avg")
+    def avg(self, request, pk=None):
+        book = Book.objects.get(pk=pk)
+        params = request.query_params
+
+        res = book._avg_per_month(
+            start_date=params.get("start_date"),
+            end_date=params.get("end_date"),
+            include_tags=params.getlist("include_tags", ""),
+            exclude_tags=params.getlist("exclude_tags", ""),
+            include_account_regex=params.get("include_account_regex", "^Expenses:.*"),
+            exclude_account_regex=params.get("exclude_account_regex"),
+            net=params.get("net", False),
+        )
+
+        return Response(res)
 
 
 class PostingViewSet(viewsets.ModelViewSet):
